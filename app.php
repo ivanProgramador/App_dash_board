@@ -255,18 +255,38 @@
 
     /*Configurando data_nicio e data fim usando os metodos __set() da classe Dashboard*/
 
+    /*Quando os dados da competencia são retornados o mes eo ano vem na mesma
+    variavel sendo que pode ser necessario trebelhar com esses dados de forma
+    separada por isso vai ser usada a função explode que separa o retorno em um array
+    usando como base um caractere especifico no caso e o '-'
+
+    explode('-', $_GET['competencia']);
+
+    separados pelo - cada um assume uma posição dentro do array
+
+    posição 0 assume o ano e posição 1 assume o mes
+
+
+     */
+    $competencia = explode('-', $_GET['competencia']);
+    $ano = $competencia[0];
+    $mes = $competencia[1];
+
+
 
    $dashboard->__set('data_inicio','2018-08-01');
    $dashboard->__set('data_fim','2018-08-31');
 
 
    $dashboard->__set('numeroVendas',$bd->getNumeroVendas());
-   $dashboard->__set('numeroVendas',$bd->getTotalVendas());
+   $dashboard->__set('totalVendas',$bd->getTotalVendas());
+
+   
    
 
-   echo "<pre>";
-   print_r($dashboard);
-    echo "<pre>";
+  
+  // print_r($dashboard);
+  
 
 
    //puxando o numero de vendas usadno o metodo da classe bd
