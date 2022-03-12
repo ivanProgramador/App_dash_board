@@ -256,7 +256,7 @@
     /*Configurando data_nicio e data fim usando os metodos __set() da classe Dashboard*/
 
     /*Quando os dados da competencia são retornados o mes eo ano vem na mesma
-    variavel sendo que pode ser necessario trebelhar com esses dados de forma
+    variavel sendo que pode ser necessario trabalhar com esses dados de forma
     separada por isso vai ser usada a função explode que separa o retorno em um array
     usando como base um caractere especifico no caso e o '-'
 
@@ -273,20 +273,40 @@
     $mes = $competencia[1];
 
 
+    /*usando um função php para contar os dias exitentes no mes e no ano que 
+      vamos especificar a função cal_days_in_month(CALL_GREGORIAN,$mes,$ano);
+      recebe 3 parametros
 
-   $dashboard->__set('data_inicio','2018-08-01');
-   $dashboard->__set('data_fim','2018-08-31');
+      1 - o tipode calendario que estamos usando(no meu casop eo gregoriano)
+      2 - mes
+      3 - ano
+
+    */
+
+    $dias_do_mes = cal_days_in_month(CAL_GREGORIAN,$mes,$ano);
+
+
+
+   /*quando for concatenar dados de data atenção a sempre dividir os valores com - porque e assim que o banco de dados 
+     exige 
+   */
+
+   $dashboard->__set('data_inicio',$ano.'-'.$mes.'-01');
+   $dashboard->__set('data_fim',$ano.'/'.$mes.'/'.$dias_do_mes);
 
 
    $dashboard->__set('numeroVendas',$bd->getNumeroVendas());
    $dashboard->__set('totalVendas',$bd->getTotalVendas());
-
-   
-   
-
   
-  // print_r($dashboard);
-  
+
+
+   /*fazendo o php transformar um objeto de uma classe em um objeto literal JSON*/
+
+   echo json_encode($dashboard);
+
+  /*
+  print_r($ano.'/'.$mes.'/'.$dias_do_mes);
+  */
 
 
    //puxando o numero de vendas usadno o metodo da classe bd

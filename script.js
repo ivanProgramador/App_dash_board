@@ -63,14 +63,20 @@ $(document).ready(() => {
    $('#competencia').on('change',e=>{
 
 
-    /*tornando o vcalor da competencia dinamico*/
+    /*tornando o valor da competencia dinamico*/
 
    let competencia = $(e.target).val()
-   console.log(competencia)
+   //console.log(competencia)
 
 
 
+    // o atributo do objeto literal  dataType:'json'  serve para definir em que formato
+    // a requisição vai fazer o seu retorno normalmente uma reuisiçãio desse tipo retorna html
+    // mas nessse caso vai retornar um objeto literal 
 
+
+    // no atributo success eu vou configurar o retorno somente com os dados do meu interesse
+    // que pertencem ao objeto dados
 
        $.ajax(
 
@@ -78,7 +84,14 @@ $(document).ready(() => {
           type:'GET',
           url:'app.php',
           data:`competencia=${competencia}`,
-          success: dados =>{console.log(dados)},
+          dataType:'json', 
+          success: dados =>{
+            
+            //substituindo o conteudo html dos indicadores de ? para os dados capturado peal requisição
+              $('#numeroVendas').html(dados.numeroVendas)
+              $('#totalVendas').html(dados.totalVendas)
+                        
+          },
           error:   erro =>{console.log(erro)}
        }
 
