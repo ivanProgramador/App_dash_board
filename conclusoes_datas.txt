@@ -1,0 +1,59 @@
+
+Dentro da logica do metodo getNumeroVendas() existem dois dados importantes para o projeto 
+data inicio e data fim a estrategia nesse caso e fazer com oque esas informações venham de fora
+para dentro do metodo, nesse caso ja que a classe Bd recebe o objeto $dashboard inteiro, pode ser usado o $this para acessar os metodos desse objeto.
+
+
+	$stmt->bindValue('data_inicio',$this->__get('data_inicio'));
+  	$stmt->bindValue('data_fim',$this->__get('data_fim'));
+
+
+então os valores que seram passados como parametro para a sql vão vir de fora e preencher o bindValue() o metodo __get() é chamado pra pegar o valor atual do  atributo desse objeto que vai ser setado la fora porque o metodo set tem que receber a data inicial e final do periodo 
+que o cliente quer ver.
+
+
+
+
+
+public function getNumeroVendas(){
+
+  	 	$query='
+          SELECT 
+            COUNT(*) as numero_vendas
+          FROM
+            tb_vendas
+          WHERE data_venda BETWEEN :data_inicio AND :data_fim
+  	 	';
+
+  	 	$stmt= $this->conexao->prepare($query);
+  	 	$stmt->bindValue('data_inicio',$this->dashboard->__get('data_inicio'));
+  	 	$stmt->bindValue('data_fim',$this->dashboard->__get('data_fim'));
+  	 	$stmt->execute();
+
+
+  	 	return $stmt->fetch(PDO::FETCH_OBJ)->numero_vendas;
+
+  	 }
+  }
+
+------------------------------------------------------------
+mandando os dados de fora pra dentro.
+
+$dashboard->__set('data_inicio','2018-10-01'); 
+$dashboard->__set('data_fim'   ,'2018-10-31'); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

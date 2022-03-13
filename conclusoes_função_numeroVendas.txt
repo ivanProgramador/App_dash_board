@@ -1,0 +1,114 @@
+O projeto trata-se de uma dashboard gerencial que tem por objetivo mostrar so cliente
+dados referentes ao desempenho da empresa como quantidade de evendas por periodo e quantidade de 
+clientes ativos e inativos assim como mostrar o valor acumulado dessas vendas.
+
+
+o passo um consiste em mapear a interface grafica para que o Jquery possa ver e manipular os elementos
+os primeiros serão 2 links suporte e documentação  que vão receber dois ids cada um com o seus respectivos 
+nomes. no caso a seleção desses elementos tem como objetivo substituir totalmente o conteudo de uma div
+especifica, basicamente o jquery vai capturar o click e acionar a função que vai substituir o conteudo. usando funçao load que nela ja tem um objeto de requisição ajax.
+
+
+O arquivo app.php sera responsavel por se conectar ao banco de dados e trazer as iformações de lá.
+
+dentro desse arquivo existem 3 classes distintas 
+
+a classe 
+Dashboard
+  contem o modelo da Dashboard com os atributos e metodos
+
+a classe 
+
+Conexao  
+  contem os dados e metodos de conexao com o banco de dados
+
+a terceira classe e a classe
+
+Bd 
+ que conecta a classe conexao e a classe dashboard para que elas possam trabalhar juntas
+ a classe Bd tem dois atributos $conexao e $dashboard no metodo construtor cada uma delas 
+ recebe a instancia de sua classe especifica para herdar metodos e atributos necessarios 
+
+  a função getNumeroVendas(); tem 3 etapas 
+
+  1 - query SQL que vai buscar os dados 
+  2 - a linha de preparação do codigo sql que sera executado
+  3 - nesse caso esta sendo usada o metodo bindValue() que substitui os valores dentro da string query
+      para evitar sql injection.
+  4 - e alinha de execução $stmt->execute();
+
+
+  Toda a operação relacionada a preparação da query, substituição de valores pelo bind,
+  inclusive a execução tem como centro o objeto $stmt porque todos os metodos estão vindo dele
+  ate o retorno  esta sendo feito pelo objeto $stmt.
+
+  $stmt->fetch(PDO::FETCH_OBJ);
+
+
+  ---------------------------------------------------------------------------------------------------
+
+   public function getNumeroVendas(){
+
+  	 	$query='
+          SELECT 
+            COUNT(*) as numero_vendas
+          FROM
+            tb_vendas
+          WHERE data_venda BETWEEN :data_inicio AND :data_fim
+  	 	';
+
+  	 	$stmt= $this->conexao->prepare($query);
+
+  	 	$stmt->bindValue('data_inicio','2018-08-01');
+  	 	$stmt->bindValue('data_fim','2018-08-31');
+
+  	 	$stmt->execute();
+
+
+  	 	return $stmt->fetch(PDO::FETCH_OBJ);
+
+  	 }
+-----------------------------------------------------------------------------------------------------
+
+falando do retorno, apos todo o processo de recuperação e retorno se executamso uma chamada pelo
+
+print_r($bd->getNumeroVendas());
+
+para entender oue esta sendo retornado temos um objeto inteiro porque e isso que o metodo retorna
+
+ $stmt->fetch(PDO::FETCH_OBJ);
+
+mas se eu não quiser todo o objeto, se eu quiser somente o valor que me interessa ue nesse caso eo
+numero de vendas eu posso usar o alias 'numero_vendas' porque ele vai receber o numero de vendas na sintaxe sql e não o objeto todo.
+
+dessa forma 
+
+  return $stmt->fetch(PDO::FETCH_OBJ)->numero_vendas;
+
+--------------------------------------------------------------------------------------------------------
+
+ // atribuindo o numero de vendas ao objeto dashboard
+
+  $dashboard -> __set('numeroVendas',$bd->getNumeroVendas());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
