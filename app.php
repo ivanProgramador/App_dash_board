@@ -80,17 +80,15 @@
 
   	 public function getNumeroVendas(){
 
-  	 	$query='
-          SELECT 
-            COUNT(*) as numero_vendas
-          FROM
-            tb_vendas
-          WHERE data_venda BETWEEN :data_inicio AND :data_fim
-  	 	';
+  	 	$query='select count(*) as numero_vendas 
+  	 	        from
+  	 	          tb_vendas
+  	 	        where
+  	 	          data_venda between :data_inicio and :data_fim';
 
   	 	$stmt= $this->conexao->prepare($query);
-  	 	$stmt->bindValue('data_inicio',$this->dashboard->__get('data_inicio'));
-  	 	$stmt->bindValue('data_fim',$this->dashboard->__get('data_fim'));
+  	 	$stmt->bindValue(':data_inicio',$this->dashboard->__get('data_inicio'));
+  	 	$stmt->bindValue(':data_fim',$this->dashboard->__get('data_fim'));
   	 	$stmt->execute();
 
 
@@ -105,24 +103,29 @@
   //instanciando 
 
   $dashboard = new Dashboard();
-  $conexao = new Conexao();
-
-  //a classe Bd recebe 2 aparametros que são os objetos dashboard e conexao
-
-  $bd = new Bd($conexao,$dashboard);
-
-  // atribuindo o numero de vendas ao objeto dashboard
-
-  $dashboard->__set('numeroVendas',$bd->getNumeroVendas());
-
-   print_r($dashboard);
+  $conexao   = new Conexao();
 
 
   // datas
 
-  $dashboard->__set('data_inicio','2018-10-01'); 
-  $dashboard->__set('data_fim','2018-10-31');
+  $dashboard->__set('data_inicio','2018-08-01'); 
+  $dashboard->__set('data_fim','2018-08-31');
+  
 
+
+  //a classe Bd recebe 2 aparametros que são os objetos dashboard e conexao
+
+ $bd = new Bd($conexao,$dashboard);
+
+  // atribuindo o numero de vendas ao objeto dashboard
+
+ $dashboard->__set('numeroVendas',$bd->getNumeroVendas());
+ 
+ echo "<pre>";
+ 
+ print_r($dashboard);
+
+ echo "</pre>";
 
 
 
