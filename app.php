@@ -78,6 +78,10 @@
   	 }
 
 
+
+
+
+
   	 public function getNumeroVendas(){
 
   	 	$query='select count(*) as numero_vendas 
@@ -95,6 +99,39 @@
   	 	return $stmt->fetch(PDO::FETCH_OBJ)->numero_vendas;
 
   	 }
+
+
+
+  	 public function getNumeroTotalVendas(){
+
+  	 	$query='select
+  	 	          count(*) as total_vendas
+  	 	        from 
+  	 	          tb_vendas';
+
+  	 	$stmt= $this->conexao->prepare($query);
+  	 	$stmt->execute();
+  	 	return $stmt->fetch(PDO::FETCH_OBJ)->total_vendas;
+
+
+
+  	 }
+
+
+  	
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
 
@@ -120,9 +157,11 @@
   // atribuindo o numero de vendas ao objeto dashboard
 
  $dashboard->__set('numeroVendas',$bd->getNumeroVendas());
+ $dashboard->__set('totalVendas',$bd->getNumeroTotalVendas());
+
  
  echo "<pre>";
- 
+
  print_r($dashboard);
 
  echo "</pre>";
